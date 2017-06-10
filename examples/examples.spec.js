@@ -6,7 +6,7 @@ const doubleServerUrl = 'localhost:3000';
 
 describe('examples', () => {
   before(() => {
-    double.definitions(definitions);
+    double.setDefinitions(definitions);
     double.listen(3000);
   });
 
