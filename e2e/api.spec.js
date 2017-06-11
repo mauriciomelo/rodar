@@ -40,7 +40,7 @@ describe('API', () => {
       double.setDefinitions(definitions);
 
       await request(doubleServerUrl)
-      .get('/double/definitions')
+      .get('/double/api/definitions')
       .set('Accept', 'application/json')
       .expect('Content-Type', /json/)
       .expect(200, expectedDefinitions);
@@ -66,7 +66,7 @@ describe('API', () => {
       double.setDefinitions(definitions);
 
       await request(doubleServerUrl)
-      .post('/double/state')
+      .post('/double/api/state')
       .send(state)
       .expect(200, { message: 'success' });
 

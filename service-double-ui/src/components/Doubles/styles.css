@@ -1,0 +1,39 @@
+.CodeMirror {
+  height: 130px;
+}
+
+.definition {
+  margin-top: 20px;
+}
+
+.container {
+  max-width: 745px;
+  margin: 0 auto;
+}
+
+.cardContent {
+  background: #e6e6e6;
+  padding: 16px;
+}
+
+.get {
+  color: green;
+}
+
+.definitionTitle {
+  font-weight: lighter;
+}
+
+.method {
+  text-transform: uppercase;
+  padding-right: 1em;
+}
+
+.name {
+  padding-right: 4em;
+  font-weight: normal;
+}
+
+.path {
+  color: gray;
+}
