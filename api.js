@@ -8,7 +8,7 @@ routes.get('/definitions', (req, res) => {
 });
 
 routes.post('/state', (req, res) => {
-  double.mock(req.body.name, req.body.state);
+  double(req.body.name).state(req.body.state);
   res.json({ message: 'success' });
 });
 

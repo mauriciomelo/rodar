@@ -16,8 +16,7 @@ const listen = (port, cb) => {
   server.listen(port, cb);
 };
 
-module.exports = {
-  mock: double.mock,
-  setDefinitions: double.setDefinitions,
-  listen,
-};
+
+double.listen = listen;
+
+module.exports = double;

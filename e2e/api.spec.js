@@ -48,7 +48,7 @@ describe('API', () => {
   });
 
   describe('POST state', () => {
-    it.only('changes the state for a definition', async () => {
+    it('changes the state for a definition', async () => {
       const definitions = [
         {
           name: 'hello',

@@ -12,7 +12,7 @@ describe('examples', () => {
 
   describe('simple endpoint mocking', () => {
     it('responds with static json', async () => {
-      double.mock('hello');
+      double('hello').state();
 
       await request(doubleServerUrl)
       .get('/hello')
@@ -22,7 +22,7 @@ describe('examples', () => {
     });
 
     it('accepts multiple states', async () => {
-      double.mock('login', { logged: true });
+      double('login').state({ logged: true });
 
       await request(doubleServerUrl)
       .post('/login')
@@ -30,7 +30,7 @@ describe('examples', () => {
       .expect('Content-Type', /json/)
       .expect(200, { message: 'OK' });
 
-      double.mock('login', { logged: false });
+      double('login').state({ logged: false });
 
       await request('localhost:3000')
       .post('/login')
