@@ -10,7 +10,7 @@ import 'codemirror/mode/javascript/javascript';
 import 'codemirror/addon/edit/closebrackets';
 import './styles.css';
 
-const apiUrl = 'http://localhost:3030/double/api';
+const apiUrl = 'api';
 
 const Definition = (props) => {
   let editorText;
@@ -31,6 +31,7 @@ const Definition = (props) => {
     name,
     method,
     path,
+    parameters,
   } = props.definition;
 
   const run = () => {
@@ -46,6 +47,14 @@ const Definition = (props) => {
     </div>
   );
 
+  const params = () => {
+    const paramsList = Object.keys(parameters)
+    .map(key => ({ [parameters[key].name]: parameters[key].type }));
+    const paramsObject = paramsList.reduce((obj, param) => Object.assign(obj, param));
+    return JSON.stringify(paramsObject, null, 2);
+  };
+
+
   return (
     <Card className="definition">
       <CardHeader
@@ -55,6 +64,8 @@ const Definition = (props) => {
       />
       <CardText style={{ padding: '0' }} expandable>
         <div className="cardContent">
+          <h3>parameters:</h3>
+          <p><pre>{ params() }</pre></p>
           <h3>state:</h3>
           <CodeMirror
             onChange={handleChange}
