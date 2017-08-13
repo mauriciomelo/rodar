@@ -107,7 +107,6 @@ class Doubles extends Component {
           <Definition
             key={definition.name}
             definition={definition}
-            parameters={Object.values(definition.parameters)}
             onChange={Doubles.handleChange}
           />
         ))}
