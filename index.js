@@ -8,8 +8,8 @@ const apiRoutes = require('./api');
 const server = express();
 server.use(cors());
 server.use(bodyParser.json());
-server.use('/double', express.static(path.join(__dirname, 'service-double-ui/build')));
-server.use('/double/api', apiRoutes);
+server.use('/', express.static(path.join(__dirname, 'service-double-ui/build')));
+server.use('/api', apiRoutes);
 
 const listen = (port, cb) => {
   server.listen(port, cb);
