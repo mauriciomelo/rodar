@@ -6,10 +6,9 @@
   "scripts": {
     "start": "nodemon index.js",
     "test": "mocha --harmony lib/**/*.spec.js",
-    "examples": "mocha --harmony examples/**/*.spec.js",
     "e2e": "mocha --harmony e2e/**/*.spec.js",
     "lint": "eslint .",
-    "dance": "npm run lint && npm test && npm run e2e && npm run examples"
+    "dance": "npm run lint && npm test && npm run e2e"
   },
   "author": "",
   "license": "ISC",

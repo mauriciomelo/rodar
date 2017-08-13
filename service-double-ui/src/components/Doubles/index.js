@@ -10,7 +10,7 @@ import 'codemirror/mode/javascript/javascript';
 import 'codemirror/addon/edit/closebrackets';
 import './styles.css';
 
-const apiUrl = 'api';
+const apiUrl = 'http://localhost:3030/double/api';
 
 const Definition = (props) => {
   let editorText;

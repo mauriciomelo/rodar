@@ -1,11 +1,14 @@
 const request = require('supertest');
+const sinon = require('sinon');
+const { expect } = require('chai');
 const double = require('../index');
 
-const doubleServerUrl = 'localhost:3000';
+const port = 3035;
+const doubleServerUrl = `http://localhost:${port}`;
 
 describe('API', () => {
   before(() => {
-    double.listen(3000);
+    double.listen(port);
   });
 
   describe('GET definitions', () => {
@@ -48,13 +51,14 @@ describe('API', () => {
   });
 
   describe('POST state', () => {
-    it('changes the state for a definition', async () => {
+    it('executes the definition handler with the state', async () => {
+      const handler = sinon.spy();
       const definitions = [
         {
           name: 'hello',
           path: '/hello',
           method: 'get',
-          handler: (req, res, { message }) => res.json({ message }),
+          handler,
         },
       ];
 
@@ -70,9 +74,7 @@ describe('API', () => {
       .send(state)
       .expect(200, { message: 'success' });
 
-      await request(doubleServerUrl)
-      .get('/hello')
-      .expect(200, { message: 'by the API' });
+      expect(handler.calledWith(state.state)).to.equal(true);
     });
   });
 });

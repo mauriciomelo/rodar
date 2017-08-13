@@ -1,5 +1,5 @@
 # service-double
 
-Fast way to mock your API.
+UI for virtual services
 
-Docs... coming soon; Meanwhile take a look at [examples](https://github.com/mauriciomelo/service-double/blob/master/examples/examples.spec.js).
+Docs... coming soon; Meanwhile take a look at the [specs](https://github.com/mauriciomelo/service-double/blob/master/e2e/api.spec.js).
