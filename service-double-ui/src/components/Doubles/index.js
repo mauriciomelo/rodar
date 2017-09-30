@@ -10,7 +10,11 @@ import 'codemirror/mode/javascript/javascript';
 import 'codemirror/addon/edit/closebrackets';
 import './styles.css';
 
-const apiUrl = 'api';
+const getApiUrl = () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const url = urlParams.get('api') || 'api';
+  return url;
+};
 
 const Definition = (props) => {
   let editorText;
@@ -95,7 +99,7 @@ class Doubles extends Component {
       name: definition.name,
       state: definition.state,
     };
-    axios.post(`${apiUrl}/state`, state);
+    axios.post(`${getApiUrl()}/state`, state);
   }
 
   constructor() {
@@ -107,7 +111,7 @@ class Doubles extends Component {
   }
 
   async fetchDefinitions() {
-    const { data } = await axios.get(`${apiUrl}/definitions`);
+    const { data } = await axios.get(`${getApiUrl()}/definitions`);
     this.setState({ definitions: data });
   }
 
