@@ -16,24 +16,11 @@
   padding: 16px;
 }
 
-.get {
-  color: green;
-}
-
 .definitionTitle {
   font-weight: lighter;
-}
-
-.method {
-  text-transform: uppercase;
-  padding-right: 1em;
 }
 
 .name {
   padding-right: 4em;
   font-weight: normal;
-}
-
-.path {
-  color: gray;
 }

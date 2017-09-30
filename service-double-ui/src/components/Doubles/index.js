@@ -33,8 +33,6 @@ const Definition = (props) => {
 
   const {
     name,
-    method,
-    path,
     parameters,
   } = props.definition;
 
@@ -45,9 +43,7 @@ const Definition = (props) => {
 
   const Title = () => (
     <div className="definitionTitle">
-      <span className={`method ${method}`}>{method} </span>
       <span className="name">{name} </span>
-      <span className="path">{path}</span>
     </div>
   );
 
@@ -69,7 +65,7 @@ const Definition = (props) => {
       <CardText style={{ padding: '0' }} expandable>
         <div className="cardContent">
           <h3>parameters:</h3>
-          <p><pre>{ params() }</pre></p>
+          <pre>{ params() }</pre>
           <h3>state:</h3>
           <CodeMirror
             onChange={handleChange}
