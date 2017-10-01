@@ -10,13 +10,16 @@ routes.get('/definitions', (req, res) => {
 routes.post('/state', (req, res) => {
   const handlerName = req.body.name;
   const handler = definitions.getDefinitionByName(handlerName).handler;
-  try {
-    const data = handler(req.body.state);
-    res.json({ message: 'success', data });
-  } catch (err) {
-    const error = err.message;
-    res.status(500).json({ message: 'error', error });
-  }
+
+  new Promise((response, reject) => {
+    try {
+      response(handler(req.body.state));
+    } catch (e) {
+      reject(e.message);
+    }
+  })
+  .then(data => res.json({ message: 'success', data }))
+  .catch(error => res.status(500).json({ message: 'error', error }));
 });
 
 module.exports = routes;
