@@ -24,3 +24,11 @@
   padding-right: 4em;
   font-weight: normal;
 }
+
+.success {
+  color: green;
+}
+
+.error {
+  color: red;
+}

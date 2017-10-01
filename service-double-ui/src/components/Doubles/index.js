@@ -14,11 +14,13 @@ class Doubles extends Component {
     super();
     this.handleChange = this.handleChange.bind(this);
     this.handleRun = this.handleRun.bind(this);
+    this.responseFor = this.responseFor.bind(this);
     this.contentFor = this.contentFor.bind(this);
     this.fetchDefinitions();
     this.state = {
       definitions: [],
       editorContents: {},
+      responses: {},
     };
   }
 
@@ -32,12 +34,24 @@ class Doubles extends Component {
       name: definition.name,
       state: definition.state,
     };
-    const response = await axios.post(`${getApiUrl()}/state`, state);
-    this.setState({ response: response.data.data });
+    const response = {};
+    try {
+      const { data } = await axios.post(`${getApiUrl()}/state`, state);
+      response.success = data.data;
+    } catch (e) {
+      response.error = e.response.data.error;
+    }
+
+    const responses = { ...this.state.responses, ...{ [definition.name]: response } };
+    this.setState({ responses });
   }
 
   contentFor(definition) {
     return this.state.editorContents[definition.name];
+  }
+
+  responseFor(definition) {
+    return this.state.responses[definition.name];
   }
 
   async fetchDefinitions() {
@@ -54,7 +68,7 @@ class Doubles extends Component {
             definition={definition}
             onChange={this.handleChange}
             onRun={this.handleRun}
-            response={this.state.response}
+            response={this.responseFor(definition)}
             editorContent={this.contentFor(definition)}
           />
         ))}

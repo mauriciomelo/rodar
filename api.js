@@ -10,8 +10,13 @@ routes.get('/definitions', (req, res) => {
 routes.post('/state', (req, res) => {
   const handlerName = req.body.name;
   const handler = definitions.getDefinitionByName(handlerName).handler;
-  const data = handler(req.body.state);
-  res.json({ message: 'success', data });
+  try {
+    const data = handler(req.body.state);
+    res.json({ message: 'success', data });
+  } catch (err) {
+    const error = err.message;
+    res.status(500).json({ message: 'error', error });
+  }
 });
 
 module.exports = routes;

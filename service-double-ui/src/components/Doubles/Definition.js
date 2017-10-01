@@ -48,7 +48,13 @@ const Definition = (props) => {
     return JSON.stringify(paramsObject, null, 2);
   };
 
-  const sanitizedResponse = () => JSON.stringify(props.response, null, 2);
+  const sanitizedResponse = () => {
+    if (!props.response) { return null; }
+    const { error, success } = props.response;
+    return JSON.stringify(success || error, null, 2);
+  };
+
+  const hasError = () => props.response && props.response.error;
 
   return (
     <Card className="definition">
@@ -66,9 +72,15 @@ const Definition = (props) => {
             onChange={handleChange}
             options={options}
           />
-          <pre>
-            { sanitizedResponse() }
-          </pre>
+          {sanitizedResponse() ?
+            <div>
+              <h3>{hasError() ? 'error:' : 'success:'}</h3>
+              <pre className={hasError() ? 'error' : 'success'}>
+                { sanitizedResponse() }
+              </pre>
+            </div> : null
+          }
+
         </div>
         <CardActions>
           <FlatButton primary label="run" onClick={handleRun} />

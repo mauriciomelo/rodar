@@ -76,5 +76,33 @@ describe('API', () => {
 
       expect(handler.calledWith(state.state)).to.equal(true);
     });
+
+    it('returns error on failure', async () => {
+      const errorMessage = 'big bang error';
+      const handler = () => {
+        throw new Error(errorMessage);
+      };
+
+      const definitions = [
+        {
+          name: 'hello',
+          path: '/hello',
+          method: 'get',
+          handler,
+        },
+      ];
+
+      const state = {
+        name: 'hello',
+        state: { message: 'by the API' },
+      };
+
+      double.setDefinitions(definitions);
+
+      await request(doubleServerUrl)
+      .post('/api/state')
+      .send(state)
+      .expect(500, { message: 'error', error: errorMessage });
+    });
   });
 });
