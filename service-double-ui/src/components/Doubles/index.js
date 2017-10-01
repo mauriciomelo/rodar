@@ -17,8 +17,6 @@ const getApiUrl = () => {
 };
 
 const Definition = (props) => {
-  let editorText;
-
   const options = {
     mode: { name: 'javascript', json: true },
     tabSize: 2,
@@ -27,18 +25,18 @@ const Definition = (props) => {
     autoCloseBrackets: true,
   };
 
-  const handleChange = (text) => {
-    editorText = text;
-  };
-
   const {
     name,
     parameters,
   } = props.definition;
 
-  const run = () => {
-    const state = JSON.parse(editorText);
-    props.onChange({ name, state });
+  const handleChange = (text) => {
+    props.onChange(name, text);
+  };
+
+  const handleRun = () => {
+    const state = JSON.parse(props.editorContent);
+    props.onRun({ name, state });
   };
 
   const Title = () => (
@@ -54,6 +52,7 @@ const Definition = (props) => {
     return JSON.stringify(paramsObject, null, 2);
   };
 
+  const sanitizedResponse = () => JSON.stringify(props.response, null, 2);
 
   return (
     <Card className="definition">
@@ -71,9 +70,12 @@ const Definition = (props) => {
             onChange={handleChange}
             options={options}
           />
+          <pre>
+            { sanitizedResponse() }
+          </pre>
         </div>
         <CardActions>
-          <FlatButton primary label="run" onClick={run} />
+          <FlatButton primary label="run" onClick={handleRun} />
         </CardActions>
       </CardText>
     </Card>
@@ -87,23 +89,39 @@ Definition.propTypes = {
     path: PropTypes.string,
   }).isRequired,
   onChange: PropTypes.func.isRequired,
+  onRun: PropTypes.func.isRequired,
+  response: PropTypes.any,
 };
 
 class Doubles extends Component {
-  static handleChange(definition) {
+  constructor() {
+    super();
+    this.handleChange = this.handleChange.bind(this);
+    this.handleRun = this.handleRun.bind(this);
+    this.contentFor = this.contentFor.bind(this);
+    this.fetchDefinitions();
+    this.state = {
+      definitions: [],
+      editorContents: {},
+    };
+  }
+
+  async handleChange(name, content) {
+    const editorContents = { ...this.state.editorContents, ...{ [name]: content } };
+    this.setState({ editorContents });
+  }
+
+  async handleRun(definition) {
     const state = {
       name: definition.name,
       state: definition.state,
     };
-    axios.post(`${getApiUrl()}/state`, state);
+    const response = await axios.post(`${getApiUrl()}/state`, state);
+    this.setState({ response: response.data.data })
   }
 
-  constructor() {
-    super();
-    this.fetchDefinitions();
-    this.state = {
-      definitions: [],
-    };
+  contentFor(definition) {
+    return this.state.editorContents[definition.name];
   }
 
   async fetchDefinitions() {
@@ -118,7 +136,10 @@ class Doubles extends Component {
           <Definition
             key={definition.name}
             definition={definition}
-            onChange={Doubles.handleChange}
+            onChange={this.handleChange}
+            onRun={this.handleRun}
+            response={this.state.response}
+            editorContent={this.contentFor(definition)}
           />
         ))}
       </div>

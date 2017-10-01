@@ -10,8 +10,8 @@ routes.get('/definitions', (req, res) => {
 routes.post('/state', (req, res) => {
   const handlerName = req.body.name;
   const handler = definitions.getDefinitionByName(handlerName).handler;
-  handler(req.body.state);
-  res.json({ message: 'success' });
+  const data = handler(req.body.state);
+  res.json({ message: 'success', data });
 });
 
 module.exports = routes;
