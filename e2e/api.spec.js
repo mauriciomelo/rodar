@@ -1,6 +1,4 @@
 const request = require('supertest');
-const sinon = require('sinon');
-const { expect } = require('chai');
 const double = require('../index');
 
 const port = 3035;
@@ -16,27 +14,19 @@ describe('API', () => {
       const definitions = [
         {
           name: 'hello',
-          path: '/hello',
-          method: 'get',
           handler: () => {},
         },
         {
           name: 'login',
-          path: '/login',
-          method: 'post',
           handler: () => {},
         },
       ];
       const expectedDefinitions = [
         {
           name: 'hello',
-          path: '/hello',
-          method: 'get',
         },
         {
           name: 'login',
-          path: '/login',
-          method: 'post',
         },
       ];
 
@@ -52,52 +42,33 @@ describe('API', () => {
 
   describe('POST state', () => {
     it('executes the definition handler with the state', async () => {
-      const handler = sinon.spy();
-      const definitions = [
-        {
-          name: 'hello',
-          path: '/hello',
-          method: 'get',
-          handler,
-        },
-      ];
+      const func = (arg1, arg2) => `${arg1}${arg2}`;
 
       const state = {
-        name: 'hello',
-        state: { message: 'by the API' },
+        name: 'func',
+        state: { arg1: 'infi', arg2: 'nity' },
       };
 
-      double.setDefinitions(definitions);
+      double.setDefinitions({ func });
 
       await request(doubleServerUrl)
       .post('/api/state')
       .send(state)
-      .expect(200, { message: 'success' });
-
-      expect(handler.calledWith(state.state)).to.equal(true);
+      .expect(200, { message: 'success', data: 'infinity' });
     });
 
     it('returns error on failure', async () => {
       const errorMessage = 'big bang error';
-      const handler = () => {
+      const error = () => {
         throw new Error(errorMessage);
       };
 
-      const definitions = [
-        {
-          name: 'hello',
-          path: '/hello',
-          method: 'get',
-          handler,
-        },
-      ];
-
       const state = {
-        name: 'hello',
-        state: { message: 'by the API' },
+        name: 'error',
+        state: {},
       };
 
-      double.setDefinitions(definitions);
+      double.setDefinitions({ error });
 
       await request(doubleServerUrl)
       .post('/api/state')

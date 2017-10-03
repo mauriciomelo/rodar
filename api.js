@@ -9,11 +9,12 @@ routes.get('/definitions', (req, res) => {
 
 routes.post('/state', (req, res) => {
   const handlerName = req.body.name;
-  const handler = definitions.getDefinitionByName(handlerName).handler;
+  const definition = definitions.getDefinitionByName(handlerName);
 
   new Promise((response, reject) => {
+    const args = Object.keys(definition.parameters).map(key => req.body.state[key]);
     try {
-      response(handler(req.body.state));
+      response(definition.handler.apply(null, args));
     } catch (e) {
       reject(e.message);
     }
