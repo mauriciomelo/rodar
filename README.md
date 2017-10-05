@@ -1,5 +1,20 @@
 # rodar
 
-UI for virtual services
+UI for your plain old functions
 
-Docs... coming soon; Meanwhile take a look at the [specs](https://github.com/mauriciomelo/rodar/blob/master/e2e/api.spec.js).
+## Install
+
+```
+npm i rodar
+```
+
+## Usage
+
+```
+const rodar = require('rodar');
+
+rodar.setDefinitions({ myFunction: message => message });
+rodar.listen(3030);
+
+console.log('listening at http://localhost:3030');
+```
