@@ -11,7 +11,7 @@ injectTapEventPlugin();
 const App = () => (
   <MuiThemeProvider>
     <div>
-      <h1 className="appTitle">Service Double</h1>
+      <h1 className="appTitle">Rodar</h1>
       <Doubles />
     </div>
   </MuiThemeProvider>

@@ -1,12 +1,12 @@
 const request = require('supertest');
-const double = require('../index');
+const rodar = require('../index');
 
 const port = 3035;
-const doubleServerUrl = `http://localhost:${port}`;
+const rodarServerUrl = `http://localhost:${port}`;
 
 describe('API', () => {
   before(() => {
-    double.listen(port);
+    rodar.listen(port);
   });
 
   describe('GET definitions', () => {
@@ -30,9 +30,9 @@ describe('API', () => {
         },
       ];
 
-      double.setDefinitions(definitions);
+      rodar.setDefinitions(definitions);
 
-      await request(doubleServerUrl)
+      await request(rodarServerUrl)
       .get('/api/definitions')
       .set('Accept', 'application/json')
       .expect('Content-Type', /json/)
@@ -49,9 +49,9 @@ describe('API', () => {
         state: { arg1: 'infi', arg2: 'nity' },
       };
 
-      double.setDefinitions({ func });
+      rodar.setDefinitions({ func });
 
-      await request(doubleServerUrl)
+      await request(rodarServerUrl)
       .post('/api/state')
       .send(state)
       .expect(200, { message: 'success', data: 'infinity' });
@@ -68,9 +68,9 @@ describe('API', () => {
         state: {},
       };
 
-      double.setDefinitions({ error });
+      rodar.setDefinitions({ error });
 
-      await request(doubleServerUrl)
+      await request(rodarServerUrl)
       .post('/api/state')
       .send(state)
       .expect(500, { message: 'error', error: errorMessage });
