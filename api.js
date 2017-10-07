@@ -8,13 +8,12 @@ routes.get('/definitions', (req, res) => {
 });
 
 routes.post('/state', (req, res) => {
-  const handlerName = req.body.name;
-  const definition = definitions.getDefinitionByName(handlerName);
+  const name = req.body.name;
+  const args = req.body.state;
 
   new Promise((response, reject) => {
-    const args = Object.keys(definition.parameters).map(key => req.body.state[key]);
     try {
-      response(definition.handler.apply(null, args));
+      response(definitions.execute(name, args));
     } catch (e) {
       reject(e.message);
     }
