@@ -11,22 +11,24 @@ describe('API', () => {
 
   describe('GET definitions', () => {
     it('responds with the list of definitions', async () => {
-      const definitions = [
-        {
-          name: 'hello',
-          handler: () => {},
-        },
-        {
-          name: 'login',
-          handler: () => {},
-        },
-      ];
+      const definitions = {
+        hello: a => a,
+        login: () => {},
+      };
+
       const expectedDefinitions = [
         {
           name: 'hello',
+          parameters: {
+            a: {
+              name: 'a',
+              type: 'any',
+            },
+          },
         },
         {
           name: 'login',
+          parameters: {},
         },
       ];
 
