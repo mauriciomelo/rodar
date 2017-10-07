@@ -44,7 +44,7 @@ const Definition = (props) => {
   const params = () => {
     const paramsList = Object.keys(parameters)
     .map(key => ({ [parameters[key].name]: parameters[key].type }));
-    const paramsObject = paramsList.reduce((obj, param) => Object.assign(obj, param));
+    const paramsObject = paramsList.reduce((obj, param) => Object.assign({}, obj, param), {});
     return JSON.stringify(paramsObject, null, 2);
   };
 
