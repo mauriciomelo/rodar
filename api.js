@@ -1,5 +1,6 @@
 const { Router } = require('express');
 const definitions = require('./lib/definitions');
+const circularJson = require('circular-json');
 
 const routes = Router();
 
@@ -15,10 +16,13 @@ routes.post('/state', (req, res) => {
     try {
       response(definitions.execute(name, args));
     } catch (e) {
-      reject(e.message);
+      reject(e.message || e);
     }
   })
-  .then(data => res.json({ message: 'success', data }))
+  .then((data) => {
+    const sanitizedData = JSON.parse(circularJson.stringify(data));
+    res.json({ message: 'success', data: sanitizedData });
+  })
   .catch(error => res.status(500).json({ message: 'error', error }));
 });
 

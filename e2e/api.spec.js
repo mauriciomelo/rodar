@@ -77,5 +77,46 @@ describe('API', () => {
       .send(state)
       .expect(500, { message: 'error', error: errorMessage });
     });
+
+    it('returns raw error if message is not defined', async () => {
+      const errorMessage = 'big bang error';
+      const error = () => {
+        throw errorMessage;
+      };
+
+      const state = {
+        name: 'error',
+        state: {},
+      };
+
+      rodar.setDefinitions({ error });
+
+      await request(rodarServerUrl)
+      .post('/api/state')
+      .send(state)
+      .expect(500, { message: 'error', error: errorMessage });
+    });
+
+    it('handles circular dependencies', async () => {
+      const func = () => {
+        const foo = {
+          bar: 'bar',
+        };
+        foo.foo = foo;
+        return foo;
+      };
+
+      const state = {
+        name: 'func',
+        state: {},
+      };
+
+      rodar.setDefinitions({ func });
+
+      await request(rodarServerUrl)
+      .post('/api/state')
+      .send(state)
+      .expect(200, { message: 'success', data: { bar: 'bar', foo: '~' } });
+    });
   });
 });
