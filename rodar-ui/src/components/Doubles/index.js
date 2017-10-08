@@ -14,20 +14,21 @@ class Doubles extends Component {
     super();
     this.handleChange = this.handleChange.bind(this);
     this.handleRun = this.handleRun.bind(this);
-    this.responseFor = this.responseFor.bind(this);
-    this.contentFor = this.contentFor.bind(this);
     this.fetchDefinitions();
     this.state = {
       definitions: [],
-      editorContents: {},
-      responses: {},
       definitionsState: {},
     };
   }
 
-  async handleChange(name, content) {
-    const editorContents = { ...this.state.editorContents, ...{ [name]: content } };
-    this.setState({ editorContents });
+  setDefinitionState(name, state) {
+    const oldState = this.state.definitionsState[name];
+    const newState = { ...oldState, ...state };
+    this.setState({ definitionsState: { ...this.definitionsState, ...{ [name]: newState } } });
+  }
+
+  handleChange(name, content) {
+    this.setDefinitionState(name, { editorContent: content });
   }
 
   async handleRun(definition) {
@@ -43,24 +44,7 @@ class Doubles extends Component {
     } catch (e) {
       response.error = e.response.data.error;
     }
-    this.setDefinitionState(definition.name, { isLoading: false });
-
-    const responses = { ...this.state.responses, ...{ [definition.name]: response } };
-    this.setState({ responses });
-  }
-
-  setDefinitionState(name, state) {
-    const oldState = this.state.definitionsState[name];
-    const newState = { ...oldState, ...state };
-    this.setState({ definitionsState: { ...this.definitionsState, ...{ [name]: newState } } });
-  }
-
-  contentFor(definition) {
-    return this.state.editorContents[definition.name];
-  }
-
-  responseFor(definition) {
-    return this.state.responses[definition.name];
+    this.setDefinitionState(definition.name, { isLoading: false, response });
   }
 
   async fetchDefinitions() {
@@ -77,8 +61,6 @@ class Doubles extends Component {
             definition={definition}
             onChange={this.handleChange}
             onRun={this.handleRun}
-            response={this.responseFor(definition)}
-            editorContent={this.contentFor(definition)}
             {...this.state.definitionsState[definition.name]}
           />
         ))}
