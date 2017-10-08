@@ -32,3 +32,11 @@
 .error {
   color: red;
 }
+
+.error,
+.success {
+  overflow: scroll;
+  max-height: 170px;
+  background: #d8d8d8;
+  padding: 10px;
+}
