@@ -8,7 +8,8 @@
     "test": "mocha --harmony lib/**/*.spec.js",
     "e2e": "mocha --harmony e2e/**/*.spec.js",
     "lint": "eslint .",
-    "dance": "npm run lint && npm test && npm run e2e"
+    "dance": "npm run lint && npm test && npm run e2e",
+    "preversion": "cd rodar-ui; npm run build"
   },
   "author": "",
   "license": "ISC",
