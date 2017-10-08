@@ -30,8 +30,16 @@ const Definition = (props) => {
     props.onChange(name, text);
   };
 
+  const sanitizedEditorContent = () => {
+    if (props.editorContent) {
+      return props.editorContent.trim();
+    }
+    return '';
+  };
+
   const handleRun = () => {
-    const state = JSON.parse(props.editorContent);
+    const content = sanitizedEditorContent();
+    const state = content ? JSON.parse(content) : {};
     props.onRun({ name, state });
   };
 
@@ -56,6 +64,17 @@ const Definition = (props) => {
 
   const hasError = () => props.response && props.response.error;
 
+  const isValid = (() => {
+    try {
+      if (sanitizedEditorContent()) {
+        JSON.parse(sanitizedEditorContent());
+      }
+      return true;
+    } catch (e) {
+      return false;
+    }
+  })();
+
   return (
     <Card className="definition">
       <CardHeader
@@ -72,6 +91,7 @@ const Definition = (props) => {
             onChange={handleChange}
             options={options}
           />
+
           {sanitizedResponse() ?
             <div>
               <h3>{hasError() ? 'error:' : 'success:'}</h3>
@@ -83,7 +103,7 @@ const Definition = (props) => {
 
         </div>
         <CardActions>
-          <FlatButton primary label="run" onClick={handleRun} />
+          <FlatButton className="error" primary disabled={!isValid} label={isValid ? 'run' : 'invalid'} onClick={handleRun} />
         </CardActions>
       </CardText>
     </Card>
