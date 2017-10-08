@@ -75,6 +75,18 @@ const Definition = (props) => {
     }
   })();
 
+  const buttonLabel = () => {
+    if (props.isLoading) {
+      return 'running...';
+    }
+
+    if (!isValid) {
+      return 'invalid';
+    }
+
+    return 'run';
+  };
+
   return (
     <Card className="definition">
       <CardHeader
@@ -103,7 +115,13 @@ const Definition = (props) => {
 
         </div>
         <CardActions>
-          <FlatButton className="error" primary disabled={!isValid} label={isValid ? 'run' : 'invalid'} onClick={handleRun} />
+          <FlatButton
+            className="error"
+            primary
+            disabled={!isValid || props.isLoading}
+            label={buttonLabel()}
+            onClick={handleRun}
+          />
         </CardActions>
       </CardText>
     </Card>
@@ -119,6 +137,7 @@ Definition.propTypes = {
   onChange: PropTypes.func.isRequired,
   onRun: PropTypes.func.isRequired,
   response: PropTypes.any,
+  isLoading: PropTypes.bool,
 };
 
 export default Definition;

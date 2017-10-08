@@ -21,6 +21,7 @@ class Doubles extends Component {
       definitions: [],
       editorContents: {},
       responses: {},
+      definitionsState: {},
     };
   }
 
@@ -35,15 +36,23 @@ class Doubles extends Component {
       state: definition.state,
     };
     const response = {};
+    this.setDefinitionState(definition.name, { isLoading: true });
     try {
       const { data } = await axios.post(`${getApiUrl()}/state`, state);
       response.success = data.data;
     } catch (e) {
       response.error = e.response.data.error;
     }
+    this.setDefinitionState(definition.name, { isLoading: false });
 
     const responses = { ...this.state.responses, ...{ [definition.name]: response } };
     this.setState({ responses });
+  }
+
+  setDefinitionState(name, state) {
+    const oldState = this.state.definitionsState[name];
+    const newState = { ...oldState, ...state };
+    this.setState({ definitionsState: { ...this.definitionsState, ...{ [name]: newState } } });
   }
 
   contentFor(definition) {
@@ -70,6 +79,7 @@ class Doubles extends Component {
             onRun={this.handleRun}
             response={this.responseFor(definition)}
             editorContent={this.contentFor(definition)}
+            {...this.state.definitionsState[definition.name]}
           />
         ))}
       </div>
